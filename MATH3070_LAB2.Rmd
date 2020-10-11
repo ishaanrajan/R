@@ -1,0 +1,115 @@
+---
+title: "MATH 3070 Lab Fall Project 2 Solutions"
+author: "Ishaan Rajan"
+date: "9/10/2020"
+output:
+  html_document:
+    toc: TRUE
+---
+
+*Remember: I expect to see commentary either in the text, in the code with comments created using `#`, or (preferably) both! **Failing to do so may result in lost points!***
+
+## Problem 1 (Verzani problem 2.4)
+*Create the following sequences, using `:`, `seq()`, or `rep()` as appropriate:*
+
+1. `"a" "a" "a" "a" "a" "a"`
+
+```{r}
+# The vector "a" repeated 6 times
+rep(c("a"),times = 6)
+```
+
+2. `1 3 ... 99` *(the odd numbers)*
+
+```{r}
+# A series of vectors containing only odd numbers from 1 to 99
+seq(1,100,by = 2)
+```
+
+3. `1 1 1 2 2 2 3 3 3`
+
+```{r}
+# Repeating each element in the vector 1,2,3 three times each
+rep(c(1,2,3), each = 3)
+```
+
+## Problem 2 (Verzani problem 2.3)
+*Let our small data set be* `2 5 4 10 8`.
+
+1. *Enter this data into a data vector `x`.*
+
+```{r}
+# The vector x representing the data set 2,5,4,10,8
+x = c(2,5,4,10,8)
+x
+```
+
+2. *Find the square of each number.*
+
+```{r}
+# The square of each element
+x
+x * x
+```
+
+3. *Subtract 6 from each number.*
+
+```{r}
+# 6 subtracted from each number
+x
+x - 6
+```
+
+4. *Subtract 9 from each number and then square the answer.*
+
+```{r}
+# Shows each step of subtracting 0 from each element in x and them squaring the answer
+x
+x - 9
+(x - 9) * (x - 9)
+```
+
+## Problem 3 (Verzani problem 2.25)
+*Write a function `isprime()` that checks if a number $x$ is prime by dividing $x$ by all the values in $2, ..., x - 1$ then checking to see if there is a remainder of 0. The expression `a %% b` returns the remainder of `a` divided by `b`.*
+
+```{r}
+# Checks if a number is prime
+isprime = function(x){
+  vec = 2:(x - 1)
+  
+  for (val in vec){
+    if(x %% val == 0){
+      return("FALSE");
+    }
+  }
+    return("TRUE")
+}
+isprime(11)
+isprime(25)
+```
+
+***BONUS:** You do not need to check all numbers from 2 to $x - 1$ to see if a number is prime. What is the largest you would need to go for an arbitrary $x$? Create a new function, `isprime2()`, that implements this better (yet still slow) method.*
+
+```{r}
+# Your code here
+```
+
+## Problem 4 (Verzani problem 2.32)
+*Fit a density estimate to the data set `pi2000` (**UsingR**). Compare with the appropriate histogram. Why might you want to add an argument like `breaks = 0:10-.5` to `hist()`? (Hint: read the documentation of `hist()` to see what setting this argument does.)*
+
+```{r}
+# Fit a density estimate to the data set pi2000
+hist(UsingR::pi2000-.1, prob=TRUE)
+lines(density(UsingR::pi2000))
+```
+
+## Problem 5 (Verzani problem 2.34)
+*The data set `DDT` (**MASS**) contains independent measurements of the pesticide DDT on kale. Make a histogram and a boxplot of the data. From these, estimate the mean and standard deviation. Check your answers with the appropriate functions.*
+
+```{r}
+#Plots the hist and boxplot of the data and finds the mean and standard deviation
+hist(MASS::DDT)
+boxplot(MASS::DDT)
+mean((MASS::DDT))
+sd(MASS::DDT)
+```

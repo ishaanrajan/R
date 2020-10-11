@@ -1,0 +1,140 @@
+---
+title: "MATH 3070 Lab Project 3"
+author: "Ishaan Rajan"
+date: "September 13, 2020"
+output:
+  html_document:
+    toc: TRUE
+---
+
+*Remember: I expect to see commentary either in the text, in the code with comments created using `#`, or (preferably) both! **Failing to do so may result in lost points!***
+
+## Problem 1 (Verzani problem 2.43)
+*The `time` variable in the `nym.2002` data set (**UsingR**) contains the time to finish the 2002 New York City Marathon for a random sample of the finishers.*
+
+1. *What percent ran the race in under 3 hours?*
+
+```{r}
+# Calculates what percentage of people ran the race in under 180 minutes
+times = UsingR::nym.2002$time
+range(times)
+under3 = sum(times < 180) / length(times)
+under3 * 100
+```
+
+2. *What is the time cutoff for the top 10%? The top 25%?*
+
+```{r}
+# Finds the top 10% and 25% times
+quantile(times,.1)
+quantile(times,.25)
+```
+
+3. *What time cuts off the bottom 10%?*
+
+```{r}
+# Finds the top 90% of times (bottom 10%)
+quantile(times,.9)
+```
+
+## Problem 2 (Verzani problem 4.1)
+*The data set `UScereal` (**MASS**) contains data on cereals sold in the United States in 1993. For this data set, answer the following questions:*
+
+1. *How many rows does the data frame have? Columns?*
+
+```{r}
+# Determines number of rows and cols in dataset
+nrow(MASS::UScereal)
+ncol(MASS::UScereal)
+```
+
+2. *How many different manufacturers are included?*
+
+```{r}
+# Determines number of different manufacturers included
+levels(MASS::UScereal$mfr)
+length(levels(MASS::UScereal$mfr))
+```
+
+3. *How many vitamin categories are included?*
+
+```{r}
+# Determines how many vitamins are included
+levels(MASS::UScereal$vitamins)
+length(levels(MASS::UScereal$vitamins))
+```
+
+4. *How many cereals have a sugar level above 10?*
+
+```{r}
+# Number of cereals with a sugar level above 10
+numsugar = MASS::UScereal$sugars
+sum(numsugar > 10)
+```
+
+5. *What is the mean calorie value for cereals with more than 5 grams of fat? Less than or equal to 5?*
+
+```{r}
+# Mean calorie value for cereals with more than 5 grams of fat and less than/equal to 5
+gramsFat = MASS::UScereal$fat
+newData1 = subset(MASS::UScereal,gramsFat > 5)
+
+newDataCals = mean(newData1$calories)
+newDataCals
+
+newData2 = subset(MASS::UScereal,gramsFat <= 5)
+newDataCals = mean(newData2$calories)
+newDataCals
+
+
+```
+
+6. *What is the mean calorie value for cereals on the middle shelf (2)?*
+
+```{r}
+# Mean calorie for middle shelf
+newData = subset(MASS::UScereal, MASS::UScereal$shelf == 2)
+mean(newData$calories)
+
+```
+
+## Problem 3 (Verzani problem 4.2)
+*R uses lists for many purposes behind the scenes. For example, the output of `lm(mpg ~ wt, data=mtcars)` returns a list. Create this object, then answer the following:*
+
+1. *How many components does this list have?*
+
+```{r}
+# Number of components in the linear model
+length(lm(mpg ~ wt, data=mtcars))
+```
+
+2. *What are the names of the components?*
+
+```{r}
+# Names of the components
+names(lm(mpg ~ wt, data=mtcars))
+```
+
+3. *What kind of data is held in the `residuals` variable?*
+
+```{r}
+# Data in residuals variable
+model = lm(mpg ~ wt, data=mtcars)
+typeof(model$residuals)
+```
+
+## Problem 4
+*Create a data frame containing the data in the following table:*
+
+| First    | Last      | Age |
+|----------|-----------|-----|
+| Marcus   | Holstein  | 23  |
+| Samuel   | Adams     | 56  |
+| Gus      | McPherson | 43  |
+| Margaret | Olsen     | 41  |
+| Zim      | Newbold   | 95  |
+
+```{r}
+# A new dataframe of the above table
+data.frame("First" = c("Marcus","Samuel","Gus","Margaret","Zim"),"Last" = c("Holstein","Adams","McPherson","Olsen","Newbold"), "Age" = c(23,56,43,41,95))
+```
