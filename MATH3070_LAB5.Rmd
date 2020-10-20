@@ -5,8 +5,6 @@ date: "10/01/2020"
 output: pdf_document
 ---
 
-*Remember: I expect to see commentary either in the text, in the code with comments created using `#`, or (preferably) both! **Failing to do so may result in lost points!***
-
 ## Problem 1 (Verzani problem 5.1)
 *For the `UScereal` (**MASS**) data set, create a scatter plot of `calories` modeled by `sugars` using the `shelf` variable to create different plot characters. Add a legend to indicate the shelf number. Is there any patterns? (Use base R plotting for this problem.)*
 
