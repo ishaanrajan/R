@@ -7,8 +7,6 @@ output:
     toc: TRUE
 ---
 
-*Remember: I expect to see commentary either in the text, in the code with comments created using `#`, or (preferably) both! **Failing to do so may result in lost points!***
-
 ## Problem 1 (Verzani problem 2.4)
 *Create the following sequences, using `:`, `seq()`, or `rep()` as appropriate:*
 
