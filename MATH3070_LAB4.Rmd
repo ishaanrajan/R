@@ -5,9 +5,6 @@ date: "9/24/2020"
 output: pdf_document
 ---
 
-*Remember: I expect to see commentary either in the text, in the code with comments created using `#`, or (preferably) both! **Failing to do so may result in lost points!***
-
-
 ## Problem 1 (Verzani problem 4.7)
 *Use the `subset()` function to return a data frame made from the `Cars93` (**MASS**) data frame consisting only of `non-USA` cars in origin, with 4 cylinders and a maximum price of \$15,000 or less.*
 
