@@ -7,8 +7,6 @@ output:
     toc: TRUE
 ---
 
-*Remember: I expect to see commentary either in the text, in the code with comments created using `#`, or (preferably) both! **Failing to do so may result in lost points!***
-
 ## Problem 1 (Verzani problem 2.43)
 *The `time` variable in the `nym.2002` data set (**UsingR**) contains the time to finish the 2002 New York City Marathon for a random sample of the finishers.*
 
