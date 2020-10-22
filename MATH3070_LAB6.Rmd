@@ -1,19 +1,21 @@
 ---
 title: "MATH3070_LAB6"
 author: "Ishaan Rajan"
-date: "10/8/2020"
+date: "10/15/2020"
 output: html_document
 ---
+
+*Remember: I expect to see commentary either in the text, in the code with comments created using `#`, or (preferably) both! **Failing to do so may result in lost points!***
 
 ## Problem 1 (Verzani problem 5.6)
 *For the `batting` (**UsingR**) data set, make parallel boxplots of the batting average (`H/AB`) for each team. Which team had the greatest median average? (Use **lattice** functions for this problem.)*
 
 ```{r, tidy=TRUE, error=TRUE}
-#Plotting batting. #How to determine which team had greatest median average?
+#Plotting batting.Greatest median average was ANA
 library(lattice)
 batting = UsingR::batting
 battingAvg = batting$H / batting$AB
-bwplot(batting$teamID ~ battingAvg, data = batting)
+bwplot(teamID ~ H/AB, data = batting)
 ```
 
 ## Problem 2 (Verzani problem 5.7)
@@ -22,7 +24,6 @@ bwplot(batting$teamID ~ battingAvg, data = batting)
 1. *Boxplots for miles per gallon (`mpg`) for groups defined by the number of gears (`gear`).*
 
 ```{r, tidy=TRUE, error=TRUE}
-# Your code here
 library(ggplot2)
 ggplot(mtcars, aes(group = gear,y = mpg, x = gear)) + geom_boxplot()
 ```
@@ -30,7 +31,7 @@ ggplot(mtcars, aes(group = gear,y = mpg, x = gear)) + geom_boxplot()
 3. *A scatterplot of `mpg` modeled by horsepower (`hp`). Create facets by the number of cylinders (`cyl`) and `gear`.*
 
 ```{r, tidy=TRUE, error=TRUE}
-# Your code here
+# mpg modeled by horsepower
 library(ggplot2)
 p = ggplot(mtcars,aes(y = mpg, x = hp)) + geom_point() + facet_grid(cyl~gear)
 print(p)
@@ -49,7 +50,10 @@ print(p)
 *(Hint: `geom`-type functions can accept data arguments and will use the data set passed rather than the default for the chart. So for the third requirement, consider adding a text layer with `geom_text(data = ..., aes(...))` where the argument passed to `data` is a subset of the data set consisting of the outlier, and `aes(...)` defines how to label that outlier.)*
 
 ```{r, tidy = TRUE, error=TRUE}
-# Your code here
+# Finds trend and outlier of batting dataset
+library(UsingR)
+library(ggplot2)
+ggplot(batting, aes(x = HR, y = IBB/AB)) +geom_point() +geom_smooth(method = "lm") +xlab("HomeRuns") +ylab("Rate of Intentional Walks") +ggtitle("Rate of Intentional Walks and HomeRuns") + geom_text(data = subset(batting, IBB/AB > .15), aes(label = teamID))
 ```
 
 ## Problem 4
@@ -62,5 +66,7 @@ olympic2012 <- read.csv("http://introcs.cs.princeton.edu/java/data/olympic-medal
 *Use any plotting system (base R, **lattice**, **ggplot2**) to create plot involving at least three variables in the `olympic2012` data set, showing a relationship not yet visualized in the lecture, the textbook, or this assignment. Explain the relationship you explored and any interesting findings. **Bonus points will be given for plots that I consider exceptionally clean, clear, and insightful, accompanied with good analyses of what you found.***
 
 ```{r, tidy=TRUE, error=TRUE}
-# Your code here
+# A plot of parallel coordinate plots.The point where a data point line intersects an axis represents the value of that variable for that data point.
+library(MASS)
+parcoord(olympic2012[c("Gold","Silver","Bronze")],col = olympic2012$Total)
 ```
