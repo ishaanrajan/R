@@ -5,10 +5,12 @@ date: "10/15/2020"
 output: html_document
 ---
 
+*Remember: I expect to see commentary either in the text, in the code with comments created using `#`, or (preferably) both! **Failing to do so may result in lost points!***
+
 ## Problem 1 (Verzani problem 5.6)
 *For the `batting` (**UsingR**) data set, make parallel boxplots of the batting average (`H/AB`) for each team. Which team had the greatest median average? (Use **lattice** functions for this problem.)*
 
-```{r, tidy=TRUE, error=TRUE}
+```{r, tidy=TRUE, error=TRUE,message=FALSE}
 #Plotting batting.Greatest median average was ANA
 library(lattice)
 batting = UsingR::batting
@@ -21,14 +23,14 @@ bwplot(teamID ~ H/AB, data = batting)
 
 1. *Boxplots for miles per gallon (`mpg`) for groups defined by the number of gears (`gear`).*
 
-```{r, tidy=TRUE, error=TRUE}
+```{r, tidy=TRUE, error=TRUE,message=FALSE}
 library(ggplot2)
 ggplot(mtcars, aes(group = gear,y = mpg, x = gear)) + geom_boxplot()
 ```
 
 3. *A scatterplot of `mpg` modeled by horsepower (`hp`). Create facets by the number of cylinders (`cyl`) and `gear`.*
 
-```{r, tidy=TRUE, error=TRUE}
+```{r, tidy=TRUE, error=TRUE,message=FALSE}
 # mpg modeled by horsepower
 library(ggplot2)
 p = ggplot(mtcars,aes(y = mpg, x = hp)) + geom_point() + facet_grid(cyl~gear)
@@ -47,7 +49,7 @@ print(p)
 
 *(Hint: `geom`-type functions can accept data arguments and will use the data set passed rather than the default for the chart. So for the third requirement, consider adding a text layer with `geom_text(data = ..., aes(...))` where the argument passed to `data` is a subset of the data set consisting of the outlier, and `aes(...)` defines how to label that outlier.)*
 
-```{r, tidy = TRUE, error=TRUE}
+```{r, tidy = TRUE, error=TRUE,message=FALSE}
 # Finds trend and outlier of batting dataset
 library(UsingR)
 library(ggplot2)
@@ -63,8 +65,9 @@ olympic2012 <- read.csv("http://introcs.cs.princeton.edu/java/data/olympic-medal
 
 *Use any plotting system (base R, **lattice**, **ggplot2**) to create plot involving at least three variables in the `olympic2012` data set, showing a relationship not yet visualized in the lecture, the textbook, or this assignment. Explain the relationship you explored and any interesting findings. **Bonus points will be given for plots that I consider exceptionally clean, clear, and insightful, accompanied with good analyses of what you found.***
 
-```{r, tidy=TRUE, error=TRUE}
-# A plot of parallel coordinate plots.The point where a data point line intersects an axis represents the value of that variable for that data point.
+```{r, tidy=TRUE, error=TRUE,message=FALSE}
+# A plot of parallel coordinate plots.The point where a data point line intersects an axis represents the value of that variable for that data point.To show a set of points in an n-dimensional space, a backdrop is drawn consisting of n parallel lines. A point in n-dimensional space is represented as a polyline with vertices on the parallel axes. Here I have Official medal ranking, GDP rank, and Population rank as the axis. The color is modeled by the official medal ranking.
+
 library(MASS)
-parcoord(olympic2012[c("Gold","Silver","Bronze")],col = olympic2012$Total)
+parcoord(olympic2012[c("Official.medal.ranking","GDP.rank","Pop.rank")],col = olympic2012$Official.medal.ranking)
 ```

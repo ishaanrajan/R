@@ -1,0 +1,98 @@
+---
+title: "MATH3070_LAB8"
+author: "Ishaan Rajan"
+date: "10/22/2020"
+output: pdf_document
+---
+
+## Problem 1 (Verzani problem 3.17)
+*The `state.x77` data set contains various information for each of the fifty United States. We wish to explore possible relationships among the variables. First, we make the data set easier to work with by turning it into a data frame.*
+
+```{r, message=FALSE}
+x77 <- data.frame(state.x77)
+```
+
+*Now, make scatter plots of `Population` and `Frost`; `Population` and `Murder`; `Population` and `Area`; and `Income` and `HS.Grad`. Do any relationships appear linear? Are there any surprising correlations?*
+
+```{r, tidy=TRUE,message=FALSE}
+# PLotting the above relationships. None of these look linear.
+library(UsingR)
+plot(Population~Frost, data = x77)
+plot(Population~Murder, data = x77)
+plot(Population~Area, data = x77)
+plot(Income~HS.Grad, data = x77)
+```
+
+## Problem 2 (Verzani problem 3.20)
+*The `batting` (**UsingR**) data set contains baseball statistics for the 2002 Major League Baseball season. What is the correlation between the number of strikeouts (`SO`) and the number of home runs (`HR`)? Make a scatter plot to see whether there is any trend. Does the data suggest that in order to hit a lot of home runs one should strike out a lot?*
+
+```{r, tidy=TRUE,message=FALSE}
+# Data suggests that more strikeouts correlates to more home runs. 
+plot(SO~HR, data = batting)
+```
+
+## Problem 3 (Verzani problem 3.24)
+*The data frame `x77` contains data from each of the fifty United States. First coerce the `state.x77` variable into a data frame with:*
+
+```{r, eval=FALSE,message=FALSE}
+x77 <- data.frame(state.x77)
+```
+
+*For the following, make a scatter plot with the regression line:*
+
+1. *The model of illiteracy rate (`Illiteracy`) modeled by high school graduation rate (`HS.Grad`).*
+
+```{r, tidy=TRUE,message=FALSE}
+# Getting line of best fit, plotting, and drawing line of best fit
+fit = lm(Illiteracy~HS.Grad, data = x77)
+plot(Illiteracy~HS.Grad, data = x77, main = "Illiteracy modeled by Grad Rate")
+abline(fit, col = "red", lwd = 2)
+
+#As expected, a negative correlation. As High School graduation rate increases, Illiteracy decreases.
+```
+
+2. *The model of life expectancy (`Life.Exp`) modeled by the murder rate (`Murder`).*
+
+```{r, tidy=TRUE,message=FALSE}
+# Getting line of best fit, plotting, and drawing line of best fit
+fit = lm(Life.Exp~Murder, data = x77)
+plot(Life.Exp~Murder, data = x77, main = "Life Expectancy modeled by Murder")
+abline(fit, col = "blue", lwd = 2)
+
+#A negative correlation as expected. As murder increases, life expectancy decreases.
+```
+
+3. *The model of income (`Income`) modeled by the illiteracy rate (`Illiteracy`).*
+
+```{r, tidy=TRUE,message=FALSE}
+# Getting line of best fit, plotting, and drawing line of best fit
+fit = lm(Income~Illiteracy, data = x77)
+plot(Income~Illiteracy, data = x77, main = "Income modeled by Illiteracy")
+abline(fit, col = "orange", lwd = 2)
+
+#Again, a negative correlation is expected. As Illiteracy increases, Income decreases. 
+
+```
+
+*Write a sentence or two describing any relationship for each fo the relationships examined above. In particular, do you find it as expected or surprising?*
+
+## Problem 4 (Verzani problem 3.32)
+*The data set `UScereal` (**MASS**) contains information about cereals on a shelf of a United States grocery store. Make a table showing the relationship between manufacturer, `mfr`, and shelf placement, `shelf`. Are there any obvious differences between manufacturers?*
+
+```{r, tidy=TRUE,message=FALSE}
+# Creating a table
+tab1 = xtabs(~mfr + shelf, data = UScereal)
+tab1
+
+#Data shows that manufacturer G and K have higher values on shelves. 
+```
+
+## Problem 5 (Verzani problem 3.33)
+*The help page for `mosaicplot()` demonstrates the data set `HairEyeColor`, which records `sex`, `Hair` color, and `Eye` color for 592 statistics students. The data set comes as a flattened table, so simply passing the object to `mosaicplot()` will create the plot. (Or, as demonstrated, passing `shade = TRUE`, as in `mosaicplot(HairEyeColor, shade = TRUE)`, will produce a colored version.)*
+*Make the plot. Why does the help page note, "there are more blue-eyed, blonde females than expected?"*
+
+```{r, tidy=TRUE,message=FALSE}
+# Your code here
+mosaicplot(HairEyeColor, shade = TRUE)
+#The help page notes, "there are more blue-eyed, blonde females than expected because the relationship should be independent(mosaic is an independence model), but it is looking like there is a dependent relationship. 
+```
