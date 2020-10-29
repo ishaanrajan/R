@@ -1,0 +1,88 @@
+---
+title: "MATH3070_LAB9"
+author: "Ishaan Rajan"
+date: "10/29/2020"
+output: pdf_document
+---
+
+*Since this assignment involves simulation, I set the seed to the following in order to get the same results:*
+
+```{r,message=FALSE}
+set.seed(5292016)
+```
+
+## Problem 1 (Verzani problem 6.2)
+*Roll a pair of dice. Let $X$ be the largest value shown on the two dice. Use `sample()` to simulate five values of $X$.*
+
+```{r, echo=FALSE,message=FALSE}
+# This code block resets the random seed in order to get consistent results. This will be hidden in the final document, DO NOT CHANGE!
+set.seed(5292016)
+```
+
+```{r, error=TRUE, tidy=TRUE,message=FALSE}
+# Get the first roll, get the second roll, find the max of the two rolls and print. Do this 5 times. 
+for (i in 1:5) {
+    firstRoll = sample(c(1,2,3,4,5,6),1)
+    secondRoll = sample(c(1,2,3,4,5,6),1)
+    print(max(firstRoll,secondRoll))
+}
+#Another way to do this would be using a vector of all the possibilities, choosing 5 times. 
+#sample(c(1,rep(2,3),rep(6,11) ...),5,replace = TRUE)
+```
+
+## Problem 2 (Verzani problem 6.3)
+*The National Basketball Association lottery to award the first pick in the draft is held by putting 1,000 balls into a hopper and selecting one. The teams with the worst records the previous year have a greater proportion of the balls. The data set `nba.draft` (**UsingR**) contains the ball allocation for the year 2002. Use `sample()` with Team as the data vector and `prob=Balls` to simulate the draft. What team do you select? Repeat until Golden State is chosen. How long did it take?*
+
+```{r, echo=FALSE,message=FALSE}
+# This code block resets the random seed in order to get consistent results. This will be hidden in the final document, DO NOT CHANGE!
+set.seed(5292016)
+```
+
+```{r, error=TRUE, tidy=TRUE,message=FALSE}
+# First team for me was Cleveland Took me 4 tries to get Golden State. 
+library(UsingR)
+sample(nba.draft$Team,prob = nba.draft$Balls,1)
+```
+
+## Problem 3 (Verzani problem 6.23)
+*Find the quintiles ($0^{\text{th}}$, $20^{\text{th}}$, $40^{\text{th}}$, $60^{\text{th}}$, $80^{\text{th}}$, and $100^{\text{th}}$ quantiles/percentiles) of the standard Normal distribution (this is a normal distribution with mean 0 and standard deviation 1).*
+
+```{r, error=TRUE, tidy=TRUE,message=FALSE}
+# Finds quintiles of standard normal distribution between 0 and 1, stepping by 0.2
+qnorm(seq(0, 1, by = 0.20), mean = 0, sd = 1)
+```
+
+## Problem 4
+*Consider flipping a fair coin $n$ times and counting the number of time the coin lands heads-up. This is a binomial random variable, but it turns out that as $n$ gets large, this distribution can be approximated with a Normal distribution, where the mean is $0.5 \times n$ and the standard deviation is $0.5 \times \sqrt{n}$. We know this thanks to the central limit theorem. When flipping 3, 5, and 20 times, plot the pmf of the binomial random variable with the appropriate parameters (you may use my function `plot_pmf()` from the lecture notes). Superimpose on each of these plots the density curve of the Normal distribution with the appropriate parameters (use the `lines()` function to do so; an example for doing this is in the lecture notes). What do you notice? When does the approximation appear best?*
+
+```{r, error=TRUE, tidy=TRUE,message=FALSE}
+# Plot PMF function
+plot_pmf = function(q, p) {
+    plot(q, p, type = "h", xlab = "x", ylab = "probability", main = "pmf", ylim = c(0, max(p) + 0.1))
+    points(q, p, pch = 16, cex = 2)
+}
+#Flipping 3 times
+binom_q3 <- 0:3
+binom_pmf3 <- dbinom(binom_q3, size = 3, prob = 0.5)
+plot_pmf(binom_q3, binom_pmf3)
+clt_norm_3 <- seq(0, 3, length = 1000)
+lines(clt_norm_3, dnorm(clt_norm_3, mean = 0.5*3, sd = 0.5*sqrt(3)), col = "black")
+
+#Flipping 5 times
+binom_q5 <- 0:5
+binom_pmf5 <- dbinom(binom_q5, size = 5, prob = 0.5)
+plot_pmf(binom_q5, binom_pmf5)
+clt_norm_5 <- seq(0, 5, length = 1000)
+lines(clt_norm_5, dnorm(clt_norm_5, mean = 0.5*5, sd = 0.5*sqrt(5)), col = "black")
+
+
+#Flipping 20 times
+binom_q20 <- 0:20
+binom_pmf20 <- dbinom(binom_q20, size = 20, prob = 0.5)
+plot_pmf(binom_q20, binom_pmf20)
+clt_norm_20 <- seq(0, 20, length = 1000)
+lines(clt_norm_20, dnorm(clt_norm_20, mean = 0.5*20, sd = 0.5*sqrt(20)), col = "black")
+
+#Approximation looks better as we approach larger numbers of n(consistent with central limit theorem).
+
+```
