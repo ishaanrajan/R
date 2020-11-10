@@ -1,0 +1,77 @@
+---
+title: "MATH3070_LAB10"
+author: "Ishaan Rajan"
+date: "11/5/2020"
+output: pdf_document
+---
+
+*Since this assignment involves simulation, I set the seed to the following in order to get the same results:*
+
+```{r}
+set.seed(5292016)
+```
+
+## Problem 1
+*Use the pipe operators from **magrittr** to do the following, all in one pipeline:*
+
+1. *On the data set `BushApproval` (**UsingR**), select only Newsweek polls, and work with a data frame that only contains the variables `date` and `approval` (i.e., drop the variable `who`, since it's no longer relevant).*
+2. *Make a line plot of Bush's approval rating.* (Hint: The dates are character data, not numeric; consider using `as.Date()`, and set the `format` argument to `"%m/%d/%y"`.)
+3. *Subtract out the mean approval rating from the `approval` variable, and make a new variable containing the centered ratings.*
+4. *Plot the new centered approval ratings as a line plot, as you did in step 2.*
+
+```{r, error=TRUE, tidy=TRUE,message=FALSE}
+# Subset, transform, and plot
+library(magrittr)
+library(UsingR)
+BushApproval %>%
+  subset(who == "newsweek", select = -who) %>%
+  transform(date = as.Date(date,"%m/%d/%y")) %>%
+  plot(type = "l", main = "Bush Approval Rating, Newsweek") %$%
+  subset(BushApproval, who == "newsweek", select = -who) %>%
+  transform(date = as.Date(date,"%m/%d/%y")) %>%
+  transform(centered_approval = approval - mean(approval))%>%
+  subset(select = -approval) %>%
+  plot(type = "l", main = "Bush Approval Rating, Newsweek")
+  
+```
+
+## Problem 2
+
+*Use **dplyr** to subset the `Cars93` (**MASS**) data set, selecting only compact cars from the USA, and containing only variables directly related to price and miles per gallon (MPG). Randomly select five observations from the resulting data set.*
+
+```{r, error=TRUE, tidy=TRUE,message=FALSE}
+# Subset then sample using piping
+library(dplyr)
+library(MASS)
+newData = Cars93 %>% filter(Origin == "USA" & Type == "Compact") %>%
+  select(Price, Max.Price, Min.Price, MPG.city, MPG.highway) %>%
+  sample_n(5)
+print(newData)
+```
+
+## Problem 3
+
+*Use **reshape2** to transform the first 100 rows in the data set `dowdata` (**UsingR**) from wide-form format to long-form format, then plot the open, high, low, and close of the Dow Jones Industrial Average using `ggplot()` from **ggplot2**.*
+
+```{r, error=TRUE, tidy=TRUE,message=FALSE}
+library(reshape2)
+library(UsingR)
+library(ggplot2)
+#subset data, then plot
+newDow = dowdata [1:100,] %>% melt(id.vars = "Date")
+ggplot(newDow,aes(Date, value, color = variable, group = 1)) + 
+  geom_line() + 
+  labs(x = "Date", y = "Value", title = "Dow Jones Average")
+```
+
+## Problem 4
+
+*Use **reshape2** to transform the data set `iris` from wide-form format to long-form format (using `melt()`) using `Species` as the id variable, then back to wide-form format (using `dcast()`), using the mean for aggregation.*
+
+```{r, error=TRUE, tidy=TRUE,message=FALSE}
+#Reshape from wide to long and then back using piping
+iris %>% melt(id.vars = "Species") %>% dcast(.,Species ~ variable, mean)
+```
+
+
+
