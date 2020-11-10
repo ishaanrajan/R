@@ -36,4 +36,3 @@ library(UsingR)
 plot(batting$HR ~ batting$H,data = batting, pch = 16, col=rgb(red = 0, green = 0, blue = 0, alpha = 0.250),cex = sqrt(SO)/10)
 #size of dot is how often they strike out
 ```
-
