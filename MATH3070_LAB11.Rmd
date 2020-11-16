@@ -1,0 +1,86 @@
+---
+title: "MATH3070_LAB11"
+author: "Ishaan Rajan"
+date: "11/12/20"
+output: pdf_document
+---
+
+*Because randomization is used in this assignment, I set the seed here, in addition to beginning each code block. **Do not change the seed!***
+
+```{r}
+set.seed(6222016)
+```
+
+## Problem 1 (Verzani problem 7.1)
+*Simulate 1000 rolls of a pair of dice, and compute the sum of each pair. Which is more common, a roll of 7 or 8?*
+
+```{r, echo=FALSE}
+# Seed reset; DO NOT CHANGE THE SEED!
+set.seed(6222016)
+```
+
+```{r, tidy=TRUE,message=FALSE}
+set.seed(6222016)
+sampleSpace = (1:6)
+N = 1000  # number of die rolls
+roll1 = sample(sampleSpace, N, replace = TRUE) #simulating each roll
+roll2 = sample(sampleSpace, N, replace = TRUE)
+sum((roll1 + roll2) == 7)
+sum((roll1 + roll2) == 8)
+
+#We can conclude that a roll of 7 is more common than an 8
+```
+
+## Problem 2 (Verzani problem 7.2)
+*For the `rivers` data set, take 1000 random samples of size 10. Compare the mean of the sample means computed from these samples, with the sample mean of the data in `rivers`.*
+
+```{r, echo=FALSE}
+# Seed reset; DO NOT CHANGE THE SEED!
+set.seed(6222016)
+```
+
+```{r, tidy=TRUE,message=FALSE}
+set.seed(6222016)
+samples = replicate(1000, mean(sample(rivers,10,replace = TRUE)))
+mean(samples)
+mean(rivers)
+
+#The mean of taking smaller samples and aggregating them is quite close to the actual mean of the dataset. 
+```
+
+## Problem 3
+*The data set `Melanoma` (**MASS**) includes data for 205 Danish patients with malignant melanoma. The variable `time` describes survival time in days, and `sex` describes the sex of the patient. Does survival time differ between the sexes?*
+
+1. *Find $\bar{x}_{\text{men}} - \bar{x}_{\text{women}}$, the mean difference in survival time (`time`) between men and women (`sex`) in `Melanoma`.*
+
+```{r, tidy = TRUE,message=FALSE}
+library(MASS)
+men = subset(Melanoma,select = c(time,sex),subset = (sex == 0))
+women = subset(Melanoma,select = c(time,sex),subset = (sex == 1))
+menAvg = mean(men$time)
+womenAvg = mean(women$time)
+print(menAvg)
+print(womenAvg)
+#the average survival time in men is about 337 days more than women 
+```
+
+2. *Investigate whether the difference you observed in part 1 is significant, using procedures explored in the lecture. There are two groups in this investigation: male (`Melanoma$sex == 0`) and female (`Melanoma$sex == 1`). Randomly reassign the data in the `time` variable to the two groups, and compute the mean difference. Repeat 2000 times (this needs to be done relatively quickly; if it takes over a few minutes, I will dock points), and determine how frequently the difference in the mean survival time between men and women (that is, $\bar{x}_{\text{men}} - \bar{x}_{\text{women}}$ in the simulated data is less than the same difference observed in the actual data. Does this analysis suggest the difference is due to "noise", or due to an actual difference in survival time between men and women?*
+
+```{r, echo=FALSE}
+# Seed reset; DO NOT CHANGE THE SEED!
+set.seed(6222016)
+```
+
+```{r, tidy=TRUE,message=FALSE}
+simulation = replicate(2000,{
+  t = sample(Melanoma$time,205) #Random sample
+  t1 = t[0:126] #split into 2 time vectors
+  t2 = t[126:204]
+  men$time = t1
+  women$time = t2
+  abs(mean(men$time - mean(women$time)))
+})
+print(sum(simulation < 336.934) / 2000)
+#Such a large percentage of the data being above the actual mean difference indicates a large amount of noise. 
+
+```
