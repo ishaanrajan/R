@@ -1,0 +1,188 @@
+---
+title: "MATH3070_LAB12"
+author: "Ishaan Rajan"
+date: "11/19/2020"
+output: pdf_document
+---
+
+*Remember: I expect to see commentary either in the text, in the code with comments created using `#`, or (preferably) both! **Failing to do so may result in lost points!***
+
+*Because randomization is used in this assignment, I set the seed here, in addition to beginning each code block. **Do not change the seed!***
+
+```{r}
+set.seed(6222016)
+```
+
+## Problem 1
+*The data set `DDT` (**MASS**) contains measurements of the pesticide DDT in kale, in parts per million. Use bootstrapping to estimate a 95% confidence interval for the mean ppm of DDT in kale. Do the same with the standard deviation. Use 2000 replications each.*
+
+```{r, echo=FALSE}
+# Seed reset; DO NOT CHANGE THE SEED!
+set.seed(6222016)
+```
+
+```{r, tidy=TRUE,message=FALSE}
+# Your code here
+library(MASS)
+mean_DDT <- replicate(2000, {
+    mean(sample(DDT, size = length(DDT), replace = TRUE))
+})
+
+quantile(mean_DDT, c(0.025, 0.975))
+
+```
+
+## Problem 2
+*An inspector receives a batch of widgets which will be used to manufacture a new product. The batch will be rejected and sent back to the manufacturer if the proportion of defective widgets in the batch exceeds 10%. The inspector selected thirty widgets from the batch and tested them. He found that of the thirty widgets he tested, two were defective.*
+
+*Let the proportion of defective widgets in the batch, $p \in \{0.1, 0.2, 0.3, ..., 0.9\}$, and assign a uniform prior to $p$ (that is, according to the prior distribution, $P(p = p_i) = P(p = p_j)$ for every $p_i, p_j \in \{0.1, 0.2, 0.3, ..., 0.9\}$; in words, each $p$ is equally likely). Given the results of the inspection:*
+
+1. *Compute the posterior distribution of $p$. Plot both the prior and posterior distribution for $p$. (You may borrow code from the lecture as appropriate; for instance, I suggest using my function `plot_pmf()`.)*
+
+```{r, tidy=TRUE, error=TRUE,message=FALSE}
+plot_pmf = function(q, p, main = "pmf") {
+    # This will plot a series of horizontal lines at q with height p, setting
+    # the y limits to a reasonable heights
+    plot(q, p, type = "h", xlab = "x", ylab = "probability", main = main, ylim = c(0, 
+        max(p) + 0.1))
+    # Usually these plots have a dot at the end of the line; the point function
+    # will add these dots to the plot created above
+    points(q, p, pch = 16, cex = 1.5)
+}
+
+# Change plot settings
+old_par = par()
+par(mfrow = c(2, 1))
+
+# Possible probabilities
+(p = seq(0, 1, by = 0.1))
+
+(prior = rep(1/length(p), times = length(p)))
+plot_pmf(p, prior, main = "Prior")
+
+n = 30  # Number of widgets
+s = 2  # Number of defective widgets
+(likelihood = p^s * (1 - p)^(n - s))
+
+# With the likelihood and prior computed, we now obtain the posterior
+# distribution.
+post = likelihood * prior
+(post = post/sum(post))  # Normalize; make proper probabilities
+
+plot_pmf(p, post, main = "Posterior")
+
+```
+
+2. *What is the posterior probability that there are too many defective chips in the batch (that is, $p > .1$)?*
+
+```{r, tidy=TRUE, error=TRUE,message=FALSE}
+# Your code here
+sum(post[which(p > .1)]) 
+(prior = rep(1/length(p), times = length(p)))
+plot_pmf(p, prior, main = "Prior")
+```
+
+3. *Compute the maximum* a-posteriori *(MAP) estimator for $p$ and a (approximately) 95% credible interval for $p$ using the posterior distribution.*
+
+```{r, tidy=TRUE, error=TRUE,message=FALSE}
+# Your code here
+p[which.max(post)]
+
+#get the CDF
+(post_cdf = cumsum(post))
+
+#Gets lower 2.5% of the tail
+(a = p[max(which(post_cdf < 0.025))])
+
+#Gets the upper 2.5% of the tail
+(b = p[min(which(post_cdf > 0.975))])
+
+#the actual probability that a <= p <= b
+sum(post[which(p >= a & p <= b)])
+
+
+
+```
+
+4. *Repeat steps 1-3, but instead of $p \in \{0.1, 0.2, 0.3, ..., 0.9\}$, let $p \in \{0.05, 0.1, 0.15, ..., 0.95\}$. Do your conclusions from earlier change? How does the new 95% credible interval compare? What does increasing the resolution of possible $p$ values do to the posterior distribution? Which do you prefer?*
+
+```{r, tidy=TRUE, error = TRUE,message=FALSE}
+# Your code here
+# Possible probabilities
+(p = seq(0, 1, by = 0.05))
+(likelihood = p^s * (1 - p)^(n - s))
+
+# With the likelihood and prior computed, we now obtain the posterior
+# distribution.
+post = likelihood * prior
+(post = post/sum(post))  # Normalize; make proper probabilities
+
+plot_pmf(p, post, main = "Posterior")
+
+#posterior probability that there are too many defective chips in the batc
+sum(post[which(p > .1)]) 
+(prior = rep(1/length(p), times = length(p)))
+plot_pmf(p, prior, main = "Prior")
+
+#maximum a-posteriori
+p[which.max(post)]
+
+#get the CDF
+(post_cdf = cumsum(post))
+
+#Gets lower 2.5% of the tail
+(a = p[max(which(post_cdf < 0.025))])
+
+#Gets the upper 2.5% of the tail
+(b = p[min(which(post_cdf > 0.975))])
+
+#the actual probability that a <= p <= b
+sum(post[which(p >= a & p <= b)])
+```
+
+5. *An advantage of Bayesian statistics is it's much more elegant to updating conclusions given prior conclusions and new data. The posterior distribution becomes the prior distribution of the next test, and a new posterior distribution can be computed given new data. Let's say the inspector draws ten more widgets from the batch and discovers that among the widgets in the new sample, five are defective. Repeat part 4, but using the posterior of the first experiment as the prior distribution of the next, and then compute the new posterior distribution. How does the new MAP estimator for $p$ and the new 95% credible interval compare to the old? What is the new probability that there are too many defective widgets? Based on this evidence, should the inspector recommend the batch be rejected?*
+
+```{r, tidy=TRUE, error = TRUE,message=FALSE}
+# Your code here
+# Possible probabilities
+(p = seq(0, 1, by = 0.1))
+
+n = 40  # Number of widgets
+s = 5  # Number of defective widgets
+
+(likelihood = p^s * (1 - p)^(n - s))
+
+# With the likelihood and prior computed, now obtain the posterior
+# distribution.
+post = likelihood * prior
+(post = post/sum(post))  # Normalize; make proper probabilities
+
+plot_pmf(p, post, main = "Posterior")
+
+#posterior probability that there are too many defective chips in the batch
+sum(post[which(p > .1)]) 
+(prior = rep(1/length(p), times = length(p)))
+plot_pmf(p, prior, main = "Prior")
+
+#maximum a-posteriori
+p[which.max(post)]
+
+#get the CDF
+(post_cdf = cumsum(post))
+
+#Gets lower 2.5% of the tail
+(a = p[max(which(post_cdf < 0.025))])
+
+#Gets the upper 2.5% of the tail
+(b = p[min(which(post_cdf > 0.975))])
+
+#the actual probability that a <= p <= b
+sum(post[which(p >= a & p <= b)]) 
+
+
+#There is a 97.6% chance that p is between 0 and 0.2, so the inspector should most likely reject the 
+
+#increasing specificity results in the confidence interval getting smaller, thus getting more precise
+```
+
+
