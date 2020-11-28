@@ -7,6 +7,7 @@ output:
     toc: TRUE
 ---
 
+
 ## Problem 1 (Verzani problem 2.43)
 *The `time` variable in the `nym.2002` data set (**UsingR**) contains the time to finish the 2002 New York City Marathon for a random sample of the finishers.*
 
