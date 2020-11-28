@@ -9,6 +9,7 @@ output:
     toc: yes
 ---
 
+
 ## Problem 1 (Verzani problem 1.1)
 *Use R as you would a calculator to find numeric answers to the following:*
 
