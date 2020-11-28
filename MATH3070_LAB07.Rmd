@@ -5,6 +5,7 @@ date: "October 6, 2016"
 output: pdf_document
 ---
 
+
 ## Problem 1 (Verzani problem 3.2)
 *For the `michelson` (**MASS**) data set, produce a density plot comparing `Speed` between Experiments 1 and 2.*
 
