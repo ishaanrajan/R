@@ -1,0 +1,160 @@
+---
+title: "MATH3070_LAB13"
+author: "Ishaan Rajan"
+date: "11/29/2020"
+output: pdf_document
+---
+
+## Problem 1 (Verzani problem 8.7)
+*Of the last ten times you've dropped your toast, it landed sticky-side down nine times. If these are a random sample from the $\text{Ber}(p)$ distribution, find an 80% confidence interval for $p$, the probability of the stidy side landing down. (Use `binconf()` (**Hmisc**) to compute the score interval.)*
+
+```{r, tidy = TRUE,message=FALSE}
+# Your solution here
+library(Hmisc)
+binconf(9,10,alpha = 0.2)
+
+```
+
+## Problem 2 (Verzani problem 8.10)
+*A survey is taken of 250 students, and a $\hat{p}$ of 0.45 is found. The same survey is repeated with 1000 students, and the same $\hat{p}$ is found. Compare the two 95% confidence intervals. What is the relationship? Is the margin of error for the second one four times smaller? If not, how much smaller is it? (Use `binom.test()` to answer this problem.)*
+
+```{r, tidy = TRUE,message=FALSE}
+binom.test(113,250)
+binom.test(450,1000)
+
+#The data indicates that the relationship is very similar. Margin of error for test 1: about 6.3%. Margin of error for test 2 is about 3.1%. The margin of error for the second test is about 2 times smaller. 
+```
+
+## Problem 3
+*For the `Melanoma` (**MASS**) data set, use `prop.test()` to find a 99% confidence interval for the difference in proportion of male and female patients with an ulcer.*
+
+```{r, tidy = TRUE,message=FALSE}
+library(MASS)
+
+mel_split <- split(Melanoma$status, Melanoma$sex)
+# Get logical vectors for whether patient died from melanoma. Group 0 is
+# women and group 1 is men, and the code 1 in the data indicates death from
+# melanoma
+fem_death <- mel_split[["0"]] == 1
+man_death <- mel_split[["1"]] == 1
+# Vector containing the number of deaths for both men and women
+deaths <- c(Female = sum(fem_death), Male = sum(man_death))
+# Vector containing sample sizes
+size <- c(Female = length(fem_death), Male = length(man_death))
+deaths/size
+
+prop.test(deaths,size,conf.level = 0.99)
+```
+
+## Problem 4 (Verzani problem 8.15)
+*The `stud.recs` (**UsingR**) data set contains a sample of math SAT scores from some population in the variable `sat.m`. Find a 90% confidence interval for the mean math SAT score for this data. (Do not use `t.test(); find this confidence interval "by hand".)*
+
+```{r, tidy = TRUE,message=FALSE}
+# Your solution here
+library(UsingR)
+p = qnorm(0.05, lower.tail = FALSE)
+xbar <- mean(stud.recs$sat.m)
+sigma = sd(stud.recs$sat.m)
+
+m = p * sigma/sqrt(length(stud.recs$sat.m))
+thisCI <- c(Lower = xbar - m, Upper = xbar + m)
+thisCI
+
+#check the confidence interval we just calculated
+t.test(stud.recs$sat.m,conf.level = 0.9)
+#the by hand CI is correct
+
+```
+
+## Problem 5 (Verzani problem 8.15)
+*For the `homedata` (**UsingR**) data set find 90% confidence intervals for both variables `y1970` and `y2000`, assuming the sample represents some population. Use `t.test()`, but first discuss whether the model assumptions are appropriate (include some check of the assumptions, like a Q-Q plot).*
+
+```{r, tidy = TRUE,message=FALSE}
+library(ggplot2)
+library(reshape2)
+
+data1970 = homedata$y1970
+data2000 = homedata$y2000
+
+tt1 = t.test(data1970, conf.level = 0.9)
+tt2 = t.test(data1970, conf.level = 0.95)
+tt3 = t.test(data1970, conf.level = 0.99)
+
+conf_int_dat <- list(`90% CI` = as.list(tt1$conf.int), `95% CI` = as.list(tt2$conf.int), 
+    `99% CI` = as.list(tt3$conf.int))
+
+melted_cid = melt(conf_int_dat)
+melted_cid
+
+plot_conf_int_dat <- dcast(melted_cid, L1 ~ L2)
+names(plot_conf_int_dat) <- c("Type", "Lower", "Upper")
+plot_conf_int_dat
+
+ggplot(plot_conf_int_dat) + geom_segment(aes(x = Lower, xend = Upper, y = Type, 
+    yend = Type), size = 2) + ggtitle("y1970 Confidence Intervals")
+
+## It's clear that larger confidence levels lead to larger intervals, as can
+# be seen in this graphic
+
+tt11 = t.test(data2000, conf.level = 0.9)
+tt22 = t.test(data2000, conf.level = 0.95)
+tt33 = t.test(data2000, conf.level = 0.99)
+
+conf_int_dat <- list(`90% CI` = as.list(tt11$conf.int), `95% CI` = as.list(tt22$conf.int), 
+    `99% CI` = as.list(tt33$conf.int))
+
+melted_cid = melt(conf_int_dat)
+melted_cid
+
+plot_conf_int_dat <- dcast(melted_cid, L1 ~ L2)
+names(plot_conf_int_dat) <- c("Type", "Lower", "Upper")
+plot_conf_int_dat
+
+ggplot(plot_conf_int_dat) + geom_segment(aes(x = Lower, xend = Upper, y = Type, 
+    yend = Type), size = 2) + ggtitle("y2000 Confidence Intervals")
+
+# It's clear that larger confidence levels lead to larger intervals, as can
+# be seen in this graphic
+
+```
+
+## Problem 6 (Verzani problem 8.26)
+*In determining the recommended dosage of AZT for AIDS patients, tests were done comparing efficacy for various dosages. If a low dosage is effective, then that would be recommended, as it would be less expensive and would have fewer potential side effects.*
+
+*A test to decide whether a dosage of 1,200 mg is similar to one of 400 mg is performed on two random samples of AIDS patients. A numeric measurement of a patient's health is made, and the before-and-after differences are recorded after treatment:*
+
+|Treatment      |   |   |   |   |    |    |    |   |   |   |
+|--------------:|---|---|---|---|----|----|----|---|---|---|
+| 400 mg group  | 7 | 0 | 8 | 1 | 10 | 12 | 2  | 9 | 5 | 2 |
+| 1200 mg group | 2 | 1 | 5 | 1 | 5  | 7  | -1 | 8 | 7 | 3 |
+
+*Find a 90% confidence interval for the differences of the means. What do you assume about the data?*
+
+```{r, tidy = TRUE,message=FALSE}
+mg400 = c(7,0,8,1,10,12,2,9,5,2)
+mg1200 = c(2,1,5,1,5,7,-1,8,7,3)
+t.test(mg400,conf.level = 0.9)
+t.test(mg1200,conf.level = 0.9)
+
+#The 400mg dose seems to be more effective, as the confidence interval includes higher numeric measurements of a patients health than the 1200mg dose. 
+
+```
+
+## Problem 7 (Verzani problem 8.27)
+*The following data is from IQ tests for pairs of twins that were separated at birth. One twin was raised by the biological parents, the other by adoptive parents.*
+
+| Twin pair  | 1  | 2  | 3  | 4   | 5  | 6  | 7  | 8  | 9   | 10  |
+|-----------:|----|----|----|-----|----|----|----|----|-----|-----|
+| Foster     | 80 | 88 | 75 | 113 | 95 | 82 | 97 | 94 | 132 | 108 |
+| Biological | 90 | 91 | 79 | 97  | 97 | 82 | 87 | 94 | 131 | 115 |
+
+*Find a 90% confidence interval for the differences of mean. What do you assume about the data? In particular, are the two samples independent?*
+
+```{r, tidy = TRUE,message=FALSE}
+frame = data.frame("Twin Pair" = c(1,2,3,4,5,6,7,8,9,10), "Foster" = c(80,88,75,113,95,82,97,94,132,108), Biological = c(90,91,79,97,97,82,87,94,131,115))
+
+t.test(frame$Foster,conf.level = 0.9)
+t.test(frame$Biological,conf.level = 0.9)
+
+#The data shows that there really is not any relationship between by what family a separated twin was raised and the IQ level of each twin respectively due to the confidence intervals being pretty much the same. 
+```
