@@ -5,7 +5,7 @@ date: "11/19/2020"
 output: pdf_document
 ---
 
-*Remember: I expect to see commentary either in the text, in the code with comments created using `#`, or (preferably) both! **Failing to do so may result in lost points!***
+
 
 *Because randomization is used in this assignment, I set the seed here, in addition to beginning each code block. **Do not change the seed!***
 
