@@ -8,6 +8,7 @@ output:
 ---
 
 
+
 ## Problem 1 (Verzani problem 2.4)
 *Create the following sequences, using `:`, `seq()`, or `rep()` as appropriate:*
 
