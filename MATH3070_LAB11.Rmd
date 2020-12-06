@@ -5,6 +5,8 @@ date: "11/12/20"
 output: pdf_document
 ---
 
+
+
 *Because randomization is used in this assignment, I set the seed here, in addition to beginning each code block. **Do not change the seed!***
 
 ```{r}
