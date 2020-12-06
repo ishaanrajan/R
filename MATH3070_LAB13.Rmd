@@ -5,6 +5,8 @@ date: "11/29/2020"
 output: pdf_document
 ---
 
+
+
 ## Problem 1 (Verzani problem 8.7)
 *Of the last ten times you've dropped your toast, it landed sticky-side down nine times. If these are a random sample from the $\text{Ber}(p)$ distribution, find an 80% confidence interval for $p$, the probability of the stidy side landing down. (Use `binconf()` (**Hmisc**) to compute the score interval.)*
 
