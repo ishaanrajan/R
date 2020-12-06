@@ -6,6 +6,7 @@ output: pdf_document
 ---
 
 
+
 ## Problem 1 (Verzani problem 4.7)
 *Use the `subset()` function to return a data frame made from the `Cars93` (**MASS**) data frame consisting only of `non-USA` cars in origin, with 4 cylinders and a maximum price of \$15,000 or less.*
 
