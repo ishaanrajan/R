@@ -6,6 +6,7 @@ output: html_document
 ---
 
 
+
 ## Problem 1 (Verzani problem 5.6)
 *For the `batting` (**UsingR**) data set, make parallel boxplots of the batting average (`H/AB`) for each team. Which team had the greatest median average? (Use **lattice** functions for this problem.)*
 
