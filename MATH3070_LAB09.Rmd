@@ -6,6 +6,7 @@ output: pdf_document
 ---
 
 
+
 *Since this assignment involves simulation, I set the seed to the following in order to get the same results:*
 
 ```{r,message=FALSE}
