@@ -6,6 +6,7 @@ output: pdf_document
 ---
 
 
+
 ## Problem 1 (Verzani problem 3.17)
 *The `state.x77` data set contains various information for each of the fifty United States. We wish to explore possible relationships among the variables. First, we make the data set easier to work with by turning it into a data frame.*
 
